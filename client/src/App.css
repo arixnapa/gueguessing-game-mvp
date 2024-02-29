@@ -1,0 +1,23 @@
+/* App.css */
+
+body {
+  font-family: "Times New Roman", serif;
+  background-color: linen;
+  font-size: 18px;
+}
+
+.points {
+  margin-top: 15px;
+  font-size: 18px;
+}
+
+/* text */
+.text {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.stand-out {
+  font-weight: bold;
+  color: hotpink;
+}
