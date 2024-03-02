@@ -9,10 +9,10 @@ const saltRounds = 10;
 const supersecret = process.env.SUPER_SECRET;
 
 /* GET users listing. */
-router.get("/", async function (req, res, next) {
-  const results = await db("SELECT * from users;");
-  res.send(results.data);
-});
+// router.get("/", async function (req, res, next) {
+//   const results = await db("SELECT * from users;");
+//   res.send(results.data);
+// });
 
 // POST new user - REGISTER PAGE
 router.post("/register", async (req, res) => {
@@ -56,6 +56,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// adjust
 router.get("/profile", userShouldBeLoggedIn, (req, res) => {
   res.send({
     message: "Here is the PROTECTED data for user " + req.user_id,
