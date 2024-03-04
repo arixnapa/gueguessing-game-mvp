@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import axios from "axios";
 import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
 const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 import locations from "../components/locations";
@@ -11,7 +12,10 @@ export default function Map() {
   const [currentLocationIndex, setCurrentLocationIndex] = useState(0);
 
   const [userGuess, setUserGuess] = useState(""); //adding the user guess
-  const [points, setPoints] = useState(0); //addint the score in points starting at 0
+  // const [scorepoints, setScorePoints] = useState(0); //adding the score in points starting at 0
+  const userId = localStorage.getItem("userId");
+  const [gameResults, setGameResults] = useState([]);
+  const token = localStorage.getItem("token");
 
   // Google API
   const { isLoaded } = useJsApiLoader({
@@ -62,24 +66,38 @@ export default function Map() {
   };
 
   // handleGuessSubmit
-  const handleGuessSubmit = () => {
+  const handleGuessSubmit = async () => {
     const currentLocation = locations[currentLocationIndex];
-
-    // to check if the user's guess matches the current city OR country
-    if (
-      userGuess.toLowerCase() === currentLocation.city.toLowerCase() ||
-      userGuess.toLowerCase() === currentLocation.country.toLowerCase()
-    ) {
-      // if they get it right, alert with correct, if not with the right answer
-      setPoints((prevPoints) => prevPoints + 1);
-      alert("Correct! You earned a point.");
-    } else {
-      alert(
-        `Incorrect. The correct location is ${currentLocation.city}, ${currentLocation.country}.`
-      );
+    try {
+      // to check if the user's guess matches the current city OR country
+      if (
+        userGuess.toLowerCase() === currentLocation.city.toLowerCase() ||
+        userGuess.toLowerCase() === currentLocation.country.toLowerCase()
+      ) {
+        const response = await axios.post(
+          "/api/users/game",
+          {
+            userId: userId,
+            scorepoints: 1,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setGameResults([...gameResults, response.data]);
+        // setScorePoints(scorepoints + 1);
+        alert("Correct! You earned a point.");
+      } else {
+        alert(
+          `Incorrect. The correct location is ${currentLocation.city}, ${currentLocation.country}.`
+        );
+      }
+      setUserGuess("");
+    } catch (error) {
+      console.log(error);
     }
-
-    setUserGuess("");
   };
 
   return (
@@ -130,7 +148,15 @@ export default function Map() {
           )}
         </div>
 
-        <p className="points">Points: {points}</p>
+        <div>
+          <h3>Game Results</h3>
+          {gameResults.map((result, index) => (
+            <div key={index}>
+              <p>Points: {result.scorepoints}</p>
+              <p>Date: {new Date(result.date).toLocaleString()}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
