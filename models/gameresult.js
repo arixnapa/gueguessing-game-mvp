@@ -15,6 +15,8 @@ module.exports = (sequelize, DataTypes) => {
   GameResult.init(
     {
       name: DataTypes.STRING,
+      scorepoints: DataTypes.INTEGER,
+      date: DataTypes.DATE,
     },
     {
       sequelize,

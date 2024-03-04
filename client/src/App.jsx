@@ -1,49 +1,51 @@
 import "./App.css";
-import { Routes, Route, Link } from "react-router-dom";
-// import GoogleMaps from "./components/GoogleMaps";
+import { useState } from "react";
+import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Page404 from "./pages/Page404";
 import Game from "./pages/Game";
-import Results from "./pages/Results";
 import Login from "./pages/Login";
-import Profile from "./pages/Profile";
+import Register from "./pages/Register";
+import NavBar from "./components/NavBar";
+import AuthContext from "./contexts/AuthContext";
+import RequireAuth from "./components/RequireAuth";
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  function signIn() {
+    setIsLoggedIn(true);
+  }
+
+  function signOut() {
+    setIsLoggedIn(false);
+  }
+
+  const authObject = {
+    isLoggedIn,
+    signIn,
+    signOut,
+  };
   return (
-    <div className="container text-center">
-      <div>
-        <ul className="nav justify-content-end">
-          <li className="nav-item">
-            <Link to="/" className="nav-link">
-              Home
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link to="/game" className="nav-link">
-              Play
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link to="/results" className="nav-link">
-              Results
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link to="/login" className="nav-link">
-              Login
-            </Link>
-          </li>
-        </ul>
+    <AuthContext.Provider value={authObject}>
+      <div className="container text-center">
+        <NavBar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/game"
+            element={
+              <RequireAuth>
+                <Game />
+              </RequireAuth>
+            }
+          />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="*" element={<Page404 />} />
+        </Routes>
       </div>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/game" element={<Game />} />
-        <Route path="/results" element={<Results />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="*" element={<Page404 />} />
-      </Routes>
-    </div>
+    </AuthContext.Provider>
   );
 }
 
