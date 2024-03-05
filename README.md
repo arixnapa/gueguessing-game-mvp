@@ -3,7 +3,7 @@
 This front-end MVP designed by Irene Zatti is a guessing interactive game app where the user can generate
 random pictures and then guess where the photos have been taken.
 The user can enter either the specific city name or the country name
-to receive points. The main feature added is Authentication and Authorization
+to receive points. The main feature added is Authentication and Authorization.
 
 ## Build With
 
