@@ -46,15 +46,12 @@ router.post("/login", async (req, res) => {
 
 //insert results player
 router.post("/game", userShouldBeLoggedIn, async (req, res) => {
-  const { scorepoints, userId } = req.body;
   const { user_id } = req;
-  console.log(userId);
   try {
     await models.GameResult.create({
       UserId: user_id,
       scorepoints: 1,
     });
-
     res.status(201).json({ message: "Guess saved successfully" });
   } catch (err) {
     res.status(400).send({ message: err.message });
