@@ -9,8 +9,11 @@ export default function NavBar() {
     signOut();
   };
   return (
-    <div>
-      <nav className="navbar navbar-expand-lg bg-body-tertiary">
+    <div className="mt-2 mb-3">
+      <nav
+        className="navbar navbar-expand-lg bg-body-tertiary "
+        style={{ backgroundColor: "#e3f2fd" }}
+      >
         <div className="container-fluid">
           <a className="navbar-brand" href="#">
             GeoGuessing
@@ -27,7 +30,7 @@ export default function NavBar() {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav">
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
                 <Link className="nav-link" to="/">
                   Home
@@ -42,8 +45,15 @@ export default function NavBar() {
               )}
               {isLoggedIn && (
                 <li className="nav-item">
-                  <Link className="nav-link" to="/Game">
+                  <Link className="nav-link" to="/game">
                     Play
+                  </Link>
+                </li>
+              )}
+              {isLoggedIn && (
+                <li className="nav-item">
+                  <Link className="nav-link" to="/rank">
+                    Rank
                   </Link>
                 </li>
               )}

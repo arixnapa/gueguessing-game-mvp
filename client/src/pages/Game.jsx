@@ -10,11 +10,7 @@ let placesService;
 export default function Map() {
   const [photo, setPhoto] = useState("");
   const [currentLocationIndex, setCurrentLocationIndex] = useState(0);
-
   const [userGuess, setUserGuess] = useState(""); //adding the user guess
-  // const [scorepoints, setScorePoints] = useState(0); //adding the score in points starting at 0
-  const userId = localStorage.getItem("userId");
-  const [gameResults, setGameResults] = useState([]);
   const token = localStorage.getItem("token");
 
   // Google API
@@ -74,20 +70,16 @@ export default function Map() {
         userGuess.toLowerCase() === currentLocation.city.toLowerCase() ||
         userGuess.toLowerCase() === currentLocation.country.toLowerCase()
       ) {
-        const response = await axios.post(
+        await axios.post(
           "/api/users/game",
-          {
-            userId: userId,
-            scorepoints: 1,
-          },
+          {},
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
-        setGameResults([...gameResults, response.data]);
-        // setScorePoints(scorepoints + 1);
+
         alert("Correct! You earned a point.");
       } else {
         alert(
@@ -146,16 +138,6 @@ export default function Map() {
               onLoad={onLoad}
             />
           )}
-        </div>
-
-        <div>
-          <h3>Game Results</h3>
-          {gameResults.map((result, index) => (
-            <div key={index}>
-              <p>Points: {result.scorepoints}</p>
-              <p>Date: {new Date(result.date).toLocaleString()}</p>
-            </div>
-          ))}
         </div>
       </div>
     </div>

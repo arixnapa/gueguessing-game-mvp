@@ -3,6 +3,7 @@ var router = express.Router();
 var jwt = require("jsonwebtoken");
 var userShouldBeLoggedIn = require("../guards/userShouldBeLoggedIn");
 var models = require("../models");
+const Sequelize = require("sequelize");
 require("dotenv").config();
 var bcrypt = require("bcrypt");
 const saltRounds = 10;
@@ -52,7 +53,6 @@ router.post("/game", userShouldBeLoggedIn, async (req, res) => {
     await models.GameResult.create({
       UserId: user_id,
       scorepoints: 1,
-      date: new Date(),
     });
 
     res.status(201).json({ message: "Guess saved successfully" });
@@ -61,6 +61,28 @@ router.post("/game", userShouldBeLoggedIn, async (req, res) => {
   }
 });
 
-// get player results
+//get the rank
+router.get("/rank", async (req, res) => {
+  try {
+    const results = await models.GameResult.findAll({
+      attributes: [
+        "UserId",
+        [Sequelize.fn("SUM", Sequelize.col("scorepoints")), "totalpoints"],
+      ],
+      group: ["UserId"],
+      order: [[Sequelize.literal("totalpoints"), "DESC"]],
+      include: [
+        {
+          model: models.User,
+          attributes: ["username"],
+        },
+      ],
+      raw: true,
+    });
+    res.json(results);
+  } catch (err) {
+    res.status(400).send({ message: err.message });
+  }
+});
 
 module.exports = router;

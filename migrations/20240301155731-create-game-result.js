@@ -12,10 +12,6 @@ module.exports = {
       scorepoints: {
         type: Sequelize.INTEGER,
       },
-      date: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

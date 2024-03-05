@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Page404 from "./pages/Page404";
 import Game from "./pages/Game";
+import Rank from "./pages/Rank";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NavBar from "./components/NavBar";
@@ -37,6 +38,14 @@ function App() {
             element={
               <RequireAuth>
                 <Game />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/rank"
+            element={
+              <RequireAuth>
+                <Rank />
               </RequireAuth>
             }
           />

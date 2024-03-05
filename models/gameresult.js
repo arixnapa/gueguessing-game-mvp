@@ -16,7 +16,6 @@ module.exports = (sequelize, DataTypes) => {
     {
       name: DataTypes.STRING,
       scorepoints: DataTypes.INTEGER,
-      date: DataTypes.DATE,
     },
     {
       sequelize,
